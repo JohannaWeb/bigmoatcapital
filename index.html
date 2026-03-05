@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Moat Industries — Only at BMI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --cream: #f5f0e8;
+    --yellow: #f2c12e;
+    --red: #d62b2b;
+    --blue: #1a2fff;
+    --mid: #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 1px solid rgba(245,240,232,0.08);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    color: var(--yellow);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+
+  .nav-badge {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    background: var(--yellow);
+    color: var(--black);
+    padding: 0.3rem 0.7rem;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 0 2.5rem;
+    padding-top: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(8rem, 22vw, 22rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(245,240,232,0.04);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    padding-top: 4rem;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--yellow);
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    max-width: 900px;
+  }
+
+  .hero-headline em {
+    font-family: 'Playfair Display', serif;
+    color: var(--yellow);
+    font-size: 0.85em;
+  }
+
+  .hero-sub {
+    margin-top: 2.5rem;
+    font-size: 0.75rem;
+    line-height: 1.8;
+    opacity: 0.5;
+    max-width: 420px;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-cta-row {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--yellow);
+    color: var(--black);
+    border: none;
+    padding: 0.9rem 2.2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: #f5d050; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(245,240,232,0.2);
+    padding: 0.9rem 2.2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-ghost:hover { border-color: var(--cream); transform: translateY(-1px); }
+
+  .hero-ticker {
+    border-top: 1px solid rgba(245,240,232,0.1);
+    padding: 1.2rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 4rem;
+    white-space: nowrap;
+    animation: ticker 22s linear infinite;
+  }
+
+  .ticker-item {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.35;
+    flex-shrink: 0;
+  }
+
+  .ticker-item span { color: var(--yellow); opacity: 1; margin-right: 0.5rem; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── DIVISIONS ── */
+  .divisions {
+    padding: 8rem 2.5rem;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(245,240,232,0.1);
+    max-width: 100px;
+  }
+
+  .divisions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(245,240,232,0.08);
+  }
+
+  .division-card {
+    background: var(--black);
+    padding: 3.5rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .division-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .division-card:nth-child(1)::before { background: var(--yellow); }
+  .division-card:nth-child(2)::before { background: var(--red); }
+  .division-card:nth-child(3)::before { background: var(--blue); }
+
+  .division-card:hover::before { transform: scaleX(1); }
+  .division-card:hover { background: #111; }
+
+  .div-number {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    opacity: 0.3;
+    margin-bottom: 2rem;
+  }
+
+  .div-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .div-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .div-tagline {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .division-card:nth-child(1) .div-tagline { color: var(--yellow); }
+  .division-card:nth-child(2) .div-tagline { color: var(--red); }
+  .division-card:nth-child(3) .div-tagline { color: var(--blue); }
+
+  .div-desc {
+    font-size: 0.7rem;
+    line-height: 1.9;
+    opacity: 0.45;
+    margin-bottom: 2rem;
+  }
+
+  .div-specs {
+    border-top: 1px solid rgba(245,240,232,0.08);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .spec-key { opacity: 0.35; }
+  .spec-val { opacity: 0.75; }
+
+  /* ── MANIFESTO ── */
+  .manifesto {
+    padding: 8rem 2.5rem;
+    background: var(--cream);
+    color: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .manifesto::before {
+    content: 'BMI';
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22rem;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(10,10,10,0.06);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .manifesto-inner {
+    max-width: 700px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .manifesto .section-label {
+    color: var(--black);
+    opacity: 0.4;
+  }
+
+  .manifesto .section-label::after { background: rgba(10,10,10,0.15); }
+
+  .manifesto-headline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.15;
+    color: var(--black);
+    margin-bottom: 2.5rem;
+  }
+
+  .manifesto-body {
+    font-size: 0.75rem;
+    line-height: 2;
+    color: var(--mid);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .manifesto-stamp {
+    margin-top: 3.5rem;
+    display: inline-block;
+    border: 3px solid var(--black);
+    padding: 0.8rem 1.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    transform: rotate(-2deg);
+    position: relative;
+  }
+
+  /* ── METRICS ── */
+  .metrics {
+    padding: 6rem 2.5rem;
+    border-top: 1px solid rgba(245,240,232,0.08);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+    margin-top: 4rem;
+  }
+
+  .metric-item {}
+
+  .metric-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--yellow);
+    letter-spacing: -0.02em;
+  }
+
+  .metric-unit {
+    font-size: 1.5rem;
+    opacity: 0.5;
+  }
+
+  .metric-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-top: 0.5rem;
+    line-height: 1.6;
+  }
+
+  /* ── ZEO BANNER ── */
+  .zeo-banner {
+    margin: 0 2.5rem;
+    border: 1px solid rgba(245,240,232,0.1);
+    padding: 3rem 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    background: rgba(245,240,232,0.02);
+  }
+
+  .zeo-banner-left {}
+
+  .zeo-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 0.75rem;
+  }
+
+  .zeo-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+  }
+
+  .zeo-sub {
+    font-size: 0.65rem;
+    opacity: 0.4;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+    max-width: 400px;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 6rem;
+    padding: 3rem 2.5rem;
+    border-top: 1px solid rgba(245,240,232,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.15em;
+    color: var(--yellow);
+  }
+
+  .footer-copy {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    opacity: 0.25;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .footer-links a:hover { opacity: 0.8; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+  .hero-headline { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-sub { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-cta-row { animation: fadeUp 0.6s 0.3s ease both; }
+
+  @media (max-width: 900px) {
+    .divisions-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .zeo-banner { flex-direction: column; align-items: flex-start; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">BMI</a>
+  <ul class="nav-links">
+    <li><a href="#divisions">Divisions</a></li>
+    <li><a href="#manifesto">Manifesto</a></li>
+    <li><a href="https://johannaweb.github.io/zero-ego-organizer-rfc/">ZEO RFC</a></li>
+    <li><a href="#">Capital</a></li>
+  </ul>
+  <span class="nav-badge">Only at BMI</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">BIG MOAT</div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Big Moat Industries — Est. 2024 — Gaia, PT</div>
+    <h1 class="hero-headline">
+      High Signal.<br>
+      <em>Low Friction.</em><br>
+      Big Moat.
+    </h1>
+    <p class="hero-sub">
+      Three divisions. One operating ethos. Zero ego, maximum throughput —
+      whether we're pulling espresso, pulling fries, or pulling term sheets.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#divisions" class="btn-primary">View Divisions</a>
+      <a href="https://johannaweb.github.io/zero-ego-organizer-rfc/" class="btn-ghost" target="_blank">Read ZEO RFC →</a>
+    </div>
+  </div>
+  <div class="hero-ticker">
+    <div class="ticker-track">
+      <span class="ticker-item"><span>▲</span> Milkshake Signal Index — STRONG BUY</span>
+      <span class="ticker-item"><span>◆</span> Fry Friction Coefficient — 0.00</span>
+      <span class="ticker-item"><span>▲</span> Big Moat Capital AUM — Classified</span>
+      <span class="ticker-item"><span>◆</span> ZEO Compliance Score — 99.4%</span>
+      <span class="ticker-item"><span>▲</span> Ego Load — MINIMAL</span>
+      <span class="ticker-item"><span>◆</span> Only at BMI</span>
+      <span class="ticker-item"><span>▲</span> Milkshake Signal Index — STRONG BUY</span>
+      <span class="ticker-item"><span>◆</span> Fry Friction Coefficient — 0.00</span>
+      <span class="ticker-item"><span>▲</span> Big Moat Capital AUM — Classified</span>
+      <span class="ticker-item"><span>◆</span> ZEO Compliance Score — 99.4%</span>
+      <span class="ticker-item"><span>▲</span> Ego Load — MINIMAL</span>
+      <span class="ticker-item"><span>◆</span> Only at BMI</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIVISIONS -->
+<section class="divisions" id="divisions">
+  <div class="section-label">Our Divisions</div>
+  <div class="divisions-grid">
+
+    <!-- Milkshakes -->
+    <div class="division-card">
+      <div class="div-number">DIV-001</div>
+      <span class="div-icon">🥤</span>
+      <div class="div-name">BMI Milkshakes</div>
+      <div class="div-tagline">High Signal. Zero Noise.</div>
+      <p class="div-desc">
+        Every shake is a well-formed message. No synthetic filler. No vanity ingredients. 
+        Maximum nutrient density, minimum cognitive overhead. 
+        Engineered for clarity. Consumed for performance.
+      </p>
+      <div class="div-specs">
+        <div class="spec-row">
+          <span class="spec-key">Signal Ratio</span>
+          <span class="spec-val">98.7%</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Noise Floor</span>
+          <span class="spec-val">Negligible</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Ego Content</span>
+          <span class="spec-val">0.0 mg</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Validated by</span>
+          <span class="spec-val">SIV Arbiter</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fries -->
+    <div class="division-card">
+      <div class="div-number">DIV-002</div>
+      <span class="div-icon">🍟</span>
+      <div class="div-name">BMI Fries</div>
+      <div class="div-tagline">Low Friction. Every Time.</div>
+      <p class="div-desc">
+        No waiting. No drama. No manager override. 
+        State-driven crisp delivery from oil to hand in validated sub-3-minute cycles.
+        The fry is sovereign. The process is the protocol.
+      </p>
+      <div class="div-specs">
+        <div class="spec-row">
+          <span class="spec-key">Friction Coeff.</span>
+          <span class="spec-val">0.00</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Avg. Delivery</span>
+          <span class="spec-val">&lt; 180s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Salt Protocol</span>
+          <span class="spec-val">ZEO Compliant</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Rejection Rate</span>
+          <span class="spec-val">0.3%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capital -->
+    <div class="division-card">
+      <div class="div-number">DIV-003</div>
+      <span class="div-icon">🏦</span>
+      <div class="div-name">Big Moat Capital</div>
+      <div class="div-tagline">Sovereign. Trustless. Inevitable.</div>
+      <p class="div-desc">
+        We deploy capital the way we deploy code: no ego-based approval chains,
+        no vibes-driven due diligence. Contribution Tokens as collateral.
+        Logic over seniority. The moat is the protocol.
+      </p>
+      <div class="div-specs">
+        <div class="spec-row">
+          <span class="spec-key">Investment Thesis</span>
+          <span class="spec-val">Zero Fear</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">DD Protocol</span>
+          <span class="spec-val">Double-Blind</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">AUM</span>
+          <span class="spec-val">Classified</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Ego Premium</span>
+          <span class="spec-val">–100%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics">
+  <div class="section-label">By The Numbers</div>
+  <div class="metrics-grid">
+    <div class="metric-item">
+      <div class="metric-value">0<span class="metric-unit">%</span></div>
+      <div class="metric-label">Ego Content<br>Across All Divisions</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">3<span class="metric-unit">div</span></div>
+      <div class="metric-label">Active Divisions<br>One Operating Ethos</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">∞<span class="metric-unit"></span></div>
+      <div class="metric-label">Moat Width<br>(Theoretical)</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-value">1<span class="metric-unit">rule</span></div>
+      <div class="metric-label">Only At BMI.<br>That's It. That's All.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-inner">
+    <div class="section-label" style="color: rgba(10,10,10,0.4);">The BMI Operating Ethos</div>
+    <h2 class="manifesto-headline">
+      We don't disrupt industries.<br>We make them embarrassed<br>they didn't do it first.
+    </h2>
+    <p class="manifesto-body">
+      Big Moat Industries is three divisions and one obsession: removing friction 
+      between intent and outcome. Whether the outcome is a perfectly calibrated shake,
+      a fry delivered on spec, or a term sheet that cuts through hierarchy like a validation script —
+      the protocol is the same.
+    </p>
+    <p class="manifesto-body">
+      Zero Ego is not a culture value. It's an architecture constraint. 
+      We don't build org charts. We build Task Graphs.
+      We don't hire for vibes. We hire for Proof of Capability.
+      We don't manage people. We manage state.
+    </p>
+    <p class="manifesto-body">
+      The moat isn't the product. The moat is the standard of operation.
+      Ship first. Refine later. Ego never.
+    </p>
+    <div class="manifesto-stamp">Only at BMI ™</div>
+  </div>
+</section>
+
+<!-- ZEO BANNER -->
+<section style="padding: 6rem 0;" id="zeo">
+  <div class="zeo-banner">
+    <div class="zeo-banner-left">
+      <div class="zeo-label">Powering All Three Divisions</div>
+      <div class="zeo-headline">Zero Ego Organizing Protocol</div>
+      <div class="zeo-sub">
+        The RFC that started as choir logistics. Now the operational backbone of milkshakes,
+        fries, and sovereign capital deployment. Show up. Or say so.
+      </div>
+    </div>
+    <a href="https://johannaweb.github.io/zero-ego-organizer-rfc/" class="btn-primary" target="_blank" style="white-space:nowrap;">Read the RFC →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Big Moat Industries</div>
+  <ul class="footer-links">
+    <li><a href="#">Milkshakes</a></li>
+    <li><a href="#">Fries</a></li>
+    <li><a href="#">Capital</a></li>
+    <li><a href="https://johannaweb.github.io/zero-ego-organizer-rfc/">ZEO RFC</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 BMI — Gaia, PT — Only at BMI</div>
+</footer>
+
+</body>
+</html>
